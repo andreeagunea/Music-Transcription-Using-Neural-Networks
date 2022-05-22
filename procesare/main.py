@@ -11,7 +11,7 @@ def notes_translate():
     if ans_proc == 1:
         print("\nPentru procesare, ati ales: autocorelatie.\n")
 
-        path_proiect = os.getcwd()                 #asa nu mai trb sa schimbi path-ul bogdan cu andreea
+        path_proiect = os.getcwd()                 #preia path-ul curent in care ruleaza programul
 
         path_folder_note = r'{}'.format(os.path.join(path_proiect, 'note_train&test'))
         path_csv = r'{}'.format(os.path.join(path_proiect, 'autocor_train&test.csv'))
