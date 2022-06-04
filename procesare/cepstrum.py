@@ -11,7 +11,7 @@ y, sr = librosa.load(file)
 # librosa.display.waveplot(y, sr=sr)
 
 #Filtru de mediere - scoate zgomotul
-med = sp.signal.medfilt(y, 21)
+semnal_med = sp.signal.medfilt(y, 21)
 #Afisare semnal dupa filtrare
 # plt.figure(figsize=(14, 5))
 # librosa.display.waveplot(med, sr=sr)
@@ -40,19 +40,19 @@ def cepstrum_f0_detection(semnal, frecv_esant):
     f0 = 1/quefrency_vector[valid][max_quefrency_index]  #pitch-ul este egal 1 supra valoarea maxima din vectorul de valori valide
     return f0
 
-pitch = cepstrum_f0_detection(y, sr)  #se apeleaza functia
+pitch = cepstrum_f0_detection(semnal_med, sr)  #se apeleaza functia
 print(pitch)  #se afiseaza pitch-ul
 
 
 
 ####Plot Cepstrum####
-# dims = y.shape
+# dims = semnal_med.shape
 # dims[0]
 
 # frame_size = dims[0]
 # time_vector = np.arange(frame_size) / sr
 
-# windowed_signal = np.hamming(frame_size) * y
+# windowed_signal = np.hamming(frame_size) * semnal_med
 # dt = 1/sr
 # freq_vector = np.fft.rfftfreq(frame_size, d=dt)
 # X = np.fft.rfft(windowed_signal)
