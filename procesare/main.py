@@ -1,60 +1,56 @@
-import os
 import autocorelatie
 import spectograma
 import cepstrum
 import knn
 import kmeans
+import os
 #from cauta_csv import cauta_csv
 
-def notes_translate():
-    ans_proc = int(input("Tip procesare dorit: autocorelatie(1), spectograma(2), cepstrum(3) sau skip procesare(0). "))
-    if ans_proc == 1:
-        print("\nPentru procesare, ati ales: autocorelatie.\n")
+def procesare(path_folder_note, path_rezultat):
+    print("\nAti ales sa faceti procesare pe {} "
+          "\nsi sa returnati {}.".format(path_folder_note, path_rezultat))
 
-        path_proiect = os.getcwd()                 #preia path-ul curent in care ruleaza programul
+    tipuri = [None, 'autocorelatie', 'spectograma', 'cepstrum']
+    raspuns = int(input("\nTip procesare dorit: autocorelatie(1), spectograma(2), cepstrum(3) sau skip procesare(0). "))
 
-        path_folder_note = r'{}'.format(os.path.join(path_proiect, 'note_train&test'))
-        path_csv = r'{}'.format(os.path.join(path_proiect, 'autocor_train&test.csv'))
+    if raspuns:
+        print("\nPentru procesare, ati ales: {}.".format(tipuri[raspuns]) + "\nSe proceseaza...")
 
-        # path_folder_note = r'{}'.format(os.path.join(path_proiect, 'note_train'))
-        # path_csv = r'{}'.format(os.path.join(path_proiect, 'autocor_train.csv'))
+        functie = tipuri[raspuns] + '.procesare(path_folder_note, path_rezultat)'
+        eval(functie)
 
-        # path_folder_note = r'{}'.format(os.path.join(path_proiect, 'note_test'))
-        # path_csv = r'{}'.format(os.path.join(path_proiect, 'autocor_test.csv'))
-
-        print("\nAti ales sa faceti procesarea pe *{}* "
-              "\nsi sa returnati *{}*.".format(path_folder_note, path_csv))
-
-        print("\nSe proceseaza...")
-
-        autocorelatie.returnare_csv(path_folder_note, path_csv)     # se returneaza CSV cu frecv si nota din *toate* fisiere.wav
-        print("\nProcesare finalizata, CSV creat.")
-
-    elif ans_proc == 2:
-        print("\nPentru procesare, ati ales: spectograma.\n")
-        spectograma.procesare()
-        print("\nProcesare finalizata.")
+    return 0
 
 
-    ans_ml = int(input("\nTip machine learning algorithm dorit: k-nn(1), k-means(2) sau skip ML(0). "))
-    if ans_ml == 1:
-        print("\nPentru clasificare, ati ales: k-nn.\n")
-        csv_ales = 'autocor_train&test.csv'
-        # csv_ales = 'autocor_train.csv'
-        # csv_ales = 'autocor_test.csv'
+def recunoastere(path_rezultat):
+    print("\nAti ales sa faceti recunoastere pe {}.".format(path_rezultat))
 
-        print("\nAti ales sa faceti ML pe *{}*.\n".format(csv_ales))
-        print("\nSe face ML...")
+    tipuri = [None, 'knn', 'kmeans']
+    raspuns = int(input("\nTip machine learning algorithm dorit: k-nn(1), k-means(2) sau skip ML(0). "))
 
-        knn.clasificare(csv_ales)
+    if raspuns:
+        print("\nPentru recunoastere, ati ales: {}.".format(tipuri[raspuns]) + "\nSe clasifica...")
 
-    elif ans_ml == 2:
-        print("\nPentru clasificare, ati ales: k-means.\n")
-        kmeans.clasificare()
+        functie = tipuri[raspuns] + '.recunoastere(path_rezultat)'
+        eval(functie)
+
+    return 0
 
 
 if __name__ == '__main__':
-    notes_translate()
+    path_proiect = os.getcwd()
 
-#bibliografie:
-#https://www.analyticsvidhya.com/blog/2021/01/a-quick-introduction-to-k-nearest-neighbor-knn-classification-using-python/
+    # Rezultatul poate fi:
+    #                       autocorelatie:  test1.csv      (ex.: autocor_test_filtrate.csv)
+    #                       spectograma:    test1          (ex.: spectograme_train_filtrate)
+    folder_note = 'note_trainsitest'
+    rezultat_procesare = 'autocor_trainsitest.csv'
+
+    path_folder_note = r'{}'.format(os.path.join(os.getcwd(), folder_note))
+    path_rezultat = r'{}'.format(os.path.join(os.getcwd(), rezultat_procesare))
+
+    procesare(path_folder_note, path_rezultat)
+    recunoastere(path_rezultat)
+
+    # 17 gresite in train + 14 gresite in test
+    # 21 gresite in train_filtrate + 15 gresite in test

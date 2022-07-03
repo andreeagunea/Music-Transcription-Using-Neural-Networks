@@ -34,9 +34,9 @@ def stergere_gresite(nume_fisiere, X, y, linii_gresite):
     y = np.delete(y, [i - 2 for i in linii_gresite], axis=0)
     return nume_fisiere, X, y
 
-def clasificare():
+def clasificare(path_rezultat):
     # se creeaza setul de date din csv-ul generat dupa procesare
-    dataset = pd.read_csv('output1.csv')
+    dataset = pd.read_csv(path_rezultat)
     # print(dataset)
     # print(type(dataset))
 
@@ -105,7 +105,3 @@ def clasificare():
     plt.scatter(indici, data_with_clusters['note_freq'],
                 c=data_with_clusters['Clusters'], cmap='rainbow')
     plt.show()
-
-
-# Bibliografie:
-# https://www.analyticsvidhya.com/blog/2021/04/k-means-clustering-simplified-in-python/

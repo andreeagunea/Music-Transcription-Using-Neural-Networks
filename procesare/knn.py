@@ -1,3 +1,8 @@
+#
+#
+#  KNN *doar* pentru autocorelatie (fisier.csv)
+
+
 import numpy as np
 import pandas as pd
 from sklearn.preprocessing import LabelEncoder
@@ -50,9 +55,9 @@ def schimbare_label(linii_gresite, nume_fisiere, y):
     return identificate_gresit(nume_fisiere, y)
 
 
-def clasificare(csv_ales):
+def recunoastere(path_rezultat):
     # se creeaza setul de date din csv-ul generat dupa procesare
-    dataset = pd.read_csv(csv_ales)
+    dataset = pd.read_csv(path_rezultat)
     # print(dataset)
     # print(type(dataset))
 
@@ -71,24 +76,25 @@ def clasificare(csv_ales):
     # print(type(y), y.shape)
 
     # script detectie note gresite
-    ans = int(input("\nIdentificam label-uri gresite puse de autocorelatie (1) sau nu (0)? "))
-    if ans:
-        linii_gresite, nr, y = identificate_gresit(nume_fisiere, y)
-        if nr:
-            print("\nPuteti sterge liniile gresite sau sa puneti fortat label-ul corect. Excel-ul nu se va modifica.")
-            ans = int(input("\nDoriti sa stergeti liniile gresite (1), sa puneti label-ul corect (2), sau nimic (3)? "))
-            if ans == 1:
-                # se sterg nota gresita, numele fisierului si frecventa ei
-                nume_fisiere, X, y = stergere_gresite(nume_fisiere, X, y, linii_gresite)
-                print('\nStergerea liniilor gresite a avut loc cu succes! Antrenati reteaua doar cu note identificate corect.')
-                # # print(X[:12])           ->  verificare stergere
-                # # print(X.shape[0])       -> ex. Excel cu autocorelatie: 370 note, 29 greseli rezulta 341 note bune
-            elif ans == 2:
-                linii_gresite, nr, y = schimbare_label(linii_gresite, nume_fisiere, y)
-            elif ans == 3:
-                print("\nAntrenati reteaua cu note identificate gresit.")
-        else:
-            print("\nToate notele au fost identificate corect. Antrenati reteaua cu note identificate corect.\n")
+    linii_gresite, nr, y = identificate_gresit(nume_fisiere, y)
+    if nr:
+        print("\nPuteti sterge liniile gresite sau sa puneti fortat label-ul corect. Excel-ul nu se va modifica.")
+        ans = int(input("\nDorti sa: stergeti liniile gresite (1), puneti label-ul corect (2), lasati asa (3) "
+                        "sau exit (4)? "))
+        if ans == 1:
+            # se sterg nota gresita, numele fisierului si frecventa ei
+            nume_fisiere, X, y = stergere_gresite(nume_fisiere, X, y, linii_gresite)
+            print('\nStergerea liniilor gresite a avut loc cu succes! Antrenati reteaua doar cu note identificate corect.')
+            # # print(X[:12])           ->  verificare stergere
+            # # print(X.shape[0])       -> ex. Excel cu autocorelatie: 370 note, 29 greseli rezulta 341 note bune
+        elif ans == 2:
+            linii_gresite, nr, y = schimbare_label(linii_gresite, nume_fisiere, y)
+        elif ans == 3:
+            print("\nAntrenati reteaua cu note identificate gresit.")
+        elif ans == 4:
+            return 0
+    else:
+        print("\nToate notele au fost identificate corect. Antrenati reteaua cu note identificate corect.\n")
 
 
 
@@ -112,13 +118,3 @@ def clasificare(csv_ales):
     cm = confusion_matrix(y_test, y_pred)
     ac = accuracy_score(y_test, y_pred)
     print('\n', 'cm=\n', cm, 'ac= ', ac)
-
-
-if __name__ == '__main__':
-    # csv_ales = 'autocor_train&test.csv'
-    csv_ales = 'autocor_train.csv'
-    # csv_ales = 'autocor_test.csv'
-    clasificare(csv_ales)
-
-# Bibliografie:
-# https://www.analyticsvidhya.com/blog/2021/01/a-quick-introduction-to-k-nearest-neighbor-knn-classification-using-python/
